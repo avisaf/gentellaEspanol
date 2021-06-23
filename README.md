@@ -10,9 +10,9 @@ CREDITOS: https://github.com/mamless/Gentella-admin-Symfony-5
 - MySQL
 
 # **INSTALATION**
-cp .env.test .env
-composer install
-mysql --user=root -p template < data.sql
+- cp .env.test .env
+- composer install
+-  mysql --user=root -p template < data.sql
 
 # **LOGIN**
 - Username : "avisaf"
