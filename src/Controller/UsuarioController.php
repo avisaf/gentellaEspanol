@@ -10,7 +10,6 @@ use App\Entity\Usuario;
 use App\Exception\SchoolException;
 use App\Form\ChangePwsdFormType;
 use App\Form\UsuarioFormType;
-use App\Manager\ConsultaManager;
 use App\Manager\UsuarioManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
