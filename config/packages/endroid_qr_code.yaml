@@ -1,0 +1,9 @@
+endroid_qr_code:
+    default:
+        writer: Endroid\QrCode\Writer\PngWriter
+        data: ''
+        # Label is not implemented for SvgWriter
+        labelText: ''
+        labelFontPath: '%kernel.project_dir%/vendor/endroid/qr-code/assets/noto_sans.otf'
+        labelFontSize: 1
+        labelAlignment: 'center'

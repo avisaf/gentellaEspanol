@@ -1,0 +1,65 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+        App\Entity\Usuario:
+            algorithm: auto
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\Usuario
+                property: username
+
+    role_hierarchy:
+        ROLE_GRIFERO:     ROLE_USER
+        ROLE_ADMISION:    ROLE_USER
+        ROLE_SECRETARIA:  ROLE_ADMISION
+        ROLE_COORDINADOR: ROLE_SECRETARIA
+        ROLE_ADMIN:       [ROLE_COORDINADOR, ROLE_SECRETARIA, ROLE_ADMISION,ROLE_GRIFERO]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+            user_checker: App\Security\UserChecker
+            anonymous: true
+            lazy: true
+            provider: app_user_provider
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+                entry_point: App\Security\LoginFormAuthenticator
+            logout:
+                path: app_logout
+                target: app_login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 2592000
+            switch_user: true
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/css, role: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/js, role: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/favicon.ico$, role: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/cola, role: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/facturador, role: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/servidor, role: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/esclavo, role: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/request$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/send-email$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/check-email$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/reset, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, role: [ ROLE_USER] }

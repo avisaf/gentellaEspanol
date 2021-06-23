@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>{% block title %}{{ project_name }}{% endblock %}</title>
+        {% block metas %}
+            <meta charset="UTF-8">
+        {% endblock %}
+        {% block stylesheets %}
+        {% endblock %}
+    </head>
+    <body {% block bodyclass %}class="" {% endblock %}>
+
+        {% block impersionate %}
+            {% if is_granted('IS_IMPERSONATOR') %}
+            <div class="alert alert-warning" style="margin-bottom: 0;">
+               Ya estas logeado como : {{ app.user.username }}
+                <a href="{{ path('app_admin_index') }}">Ingresar</a>
+            </div>
+            {% endif %}
+        {% endblock %}
+        {% block body %}{% endblock %}
+        {% block javascripts %}
+
+        {% endblock %}
+    </body>
+</html>

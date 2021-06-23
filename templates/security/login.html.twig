@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inicio
+{% endblock %}
+{% block stylesheets %}
+	<meta
+	http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Meta, title, CSS, favicons, etc. -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta
+	name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Bootstrap -->
+	<link
+	href="{{ asset('vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link
+	href="{{ asset('vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+	<!-- NProgress -->
+	<link
+	href="{{ asset('vendors/nprogress/nprogress.css') }}" rel="stylesheet">
+	<!-- Animate -->
+	<link
+	href="{{ asset('vendors/animate.css/animate.css') }}" rel="stylesheet">
+	<!-- iCheck -->
+	<link
+	href="{{ asset('vendors/iCheck/skins/flat/green.css') }}" rel="stylesheet">
+	<!-- Custom Theme Style -->
+	<link href="{{ asset('build/css/custom.min.css') }}" rel="stylesheet">
+{% endblock %}
+{% block bodyclass %}class="login"
+{% endblock %}
+{% block body %}
+	<div>
+		<a class="hiddenanchor" id="signup"></a>
+		<a class="hiddenanchor" id="signin"></a>
+		<div class="login_wrapper">
+			<div class="animate form login_form">
+				<section class="login_content">
+					<form method="post">
+						{% if servidor == 1  %}
+							<h1>SISTEMA DE GESTIÓN <br>{{ project_name | upper  }}</h1>
+						{% else %}
+							<h1>FACTURADOR OFFLINE <br>{{ project_name | upper  }}</h1>
+						{% endif %}
+						<div>
+							<input type="text" value="{{ last_username }}" name="username" id="inputText" class="form-control" placeholder="Usuario" required autofocus>
+						</div>
+						<div>
+							<input type="password" name="password" id="inputPassword" class="form-control" placeholder="Contraseña" required>
+							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+						</div>
+						<div style="padding-left: 150px;">
+							<input type="checkbox"  name="_remember_me"><span>Recordarme</span>
+						</div>
+						<div>
+							<button class="btn btn-success submit" href="index.html">Ingresar</button>
+						</div>
+
+						<div class="separator">
+
+
+							<div class="clearfix"></div>
+							<br/>
+
+							<div>
+								<p>
+									<i class="fa fa-paw"></i>
+									{{ grupo_name | upper }}
+								© multiservicios
+								</p>
+							</div>
+						</div>
+
+						<div class="clearfix"></div>
+						{% if error %}
+							<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+						{% endif %}
+					</form>
+				</section>
+			</div>
+
+{% endblock %}
+{% block javascripts %}
+{% endblock %}

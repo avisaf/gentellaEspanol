@@ -1,0 +1,140 @@
+{% extends "admin/bars.html.twig" %}
+
+
+{% block contenpage %}
+	<div class="">
+		<div class="page-title">
+			<div class="title_left">
+				<h5>
+					{{ project_name | upper }}
+				</h5>
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="x_panel">
+					<div class="x_title">
+						<h2>
+							LISTA DE USUARIOS</h2>
+						<ul class="nav navbar-right panel_toolbox">
+							<li>
+								<a href="{{ path('app_usuarios.new') }}" class="btn btn-success">NUEVO</a>
+							</li>
+						</ul>
+						<div class="clearfix"></div>
+					</div>
+					<div class="x_content">
+						<div class="row">
+{#							<form action="{{ path('app_admin_groupaction_user') }}" id="grpaction" method="post" name="grpaction">#}
+{#								<div class="form-group form-inline">#}
+{#									<select class="form-control" name="action" required id="action_select">#}
+{#										<option value="">#}
+{#											ACCIONES</option>#}
+{#										<option value="{{"backend.user.deactivate"|trans }}">#}
+{#											Deshabilitar</option>#}
+{#										<option value="{{"backend.user.Activate"|trans }}">#}
+{#											Habilitar</option>#}
+{#										<option value="{{"backend.user.delete"|trans }}">#}
+{#											Eliminar</option>#}
+{#									</select>#}
+{#									<button class="btn btn-primary" type="submit">Ejecutar</button>#}
+{#								</div>#}
+
+{#							</form>#}
+							<table id="listaUsuarios" class="display table table-striped table-bordered dataminetables">
+								<thead>
+									<th><input type="checkbox" id="select_all" name="select_all"></th>
+									<th>Usuario</th>
+									<th>Nombres completos</th>
+									<th>Fecha nacimiento</th>
+									<th>Tipo de documentos</th>
+									<th>Documento</th>
+									<th>Rol</th>
+									<th>Acciones</th>
+								</thead>
+								<tbody>
+									{% for user in users|filter(user => not user.deleted)  %}
+										<tr>
+											<td><input type="checkbox" class="chkgrp" name="chkgrp[]" value="{{ user.id }}"></td>
+											<td>{{ user.username }}</td>
+											<td>{{ user.nombreCompleto }}</td>
+											<td>{{ user.fechaNacimiento | date('d-m-Y') }}</td>
+											<td>{{ user.tipoDocumento |  upper }}</td>
+											<td>{{ user.documento |  upper }}</td>
+											<td>{{ user.rol  |  upper | format_rol }}</td>
+											<td>
+												<a class="btn btn-primary" href="{{ path('app_usuarios.editar',{"id":user.id}) }}">
+													<i class="fa fa-edit"></i>
+												</a>
+												{%  if user.valid %}
+													<a class="btn btn-success activate-link" href="{{ path('app_usuarios.change.valides', {'id': user.id}) }}">
+														<i class="fa fa-check"></i>
+													</a>
+												{% else %}
+													<a class="btn btn-warning activate-link" href="{{ path('app_usuarios.change.valides', {'id': user.id}) }}">
+														<i class="fa fa-times"></i>
+													</a>
+												{% endif %}
+
+
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+{% endblock %}
+{% block javascripts_footer %}
+	{{ parent() }}
+	<script>
+
+
+
+		$(document).on("click",".activate-link",function (e) {
+			/*$(".activate-link").click(function(e) {*/
+			e.preventDefault();
+			var btn = $(this);
+			var link = $(this).attr("href");
+			$.ajax({
+				url: link,
+				method: 'POST',
+				success: function(data){
+					if(data.message=="success"){
+						if(data.value==true){
+							btn.removeClass("btn-success");
+							btn.removeClass("btn-warning");
+							btn.addClass("btn-success");
+							btn.html("<i class=\"fa fa-check\"></i>");
+							notif("success","Estado:","Activado");
+						}else if(data.value==false) {
+							btn.removeClass("btn-success");
+							btn.removeClass("btn-warning");
+							btn.addClass("btn-warning");
+							btn.html("<i class=\"fa fa-times\"></i>");
+							notif("warning","Estado:","Desactivado");
+						}
+
+
+					}else {
+						notif("error","Error","Error interno del servidor.");
+					}
+				},
+				error: function(xhr){
+					notif("error","Error","Ha ocurrido un error inesperado.");
+				}
+			});
+		});
+
+
+	</script>
+
+{% endblock %}
